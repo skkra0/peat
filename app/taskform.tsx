@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const TaskForm = ({formTask, setFormTask, handleSubmit}: {formTask: Task, setFormTask: any, handleSubmit: any}) => { // Specify the type for formTask as Task
+const TaskForm = ({formTask, setFormTask, handleSubmit}: {formTask: Task, setFormTask: any, handleSubmit: any}) => {
     const [inputs, setInputs] = useState(1);
 
     return (

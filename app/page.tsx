@@ -1,9 +1,26 @@
 "use client"
-import React, {FormEvent, useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import TaskForm from './taskform';
+const NAMESPACE = "TODOAPP";
+
+const t = () => {
+    let tasks = localStorage.getItem(NAMESPACE);
+    if (tasks != null) {
+        return JSON.parse(tasks);
+    }
+    return [];
+}
 
 const page = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
+    
+    useEffect(() => {
+        setTasks(t());
+    }, []);
+
+    useEffect(() => {
+        if (tasks.length > 0) localStorage.setItem(NAMESPACE, JSON.stringify(tasks));
+    }, [tasks]);
 
     const [formTask, setFormTask] = useState<Task>({
         title: "",
@@ -13,7 +30,7 @@ const page = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        setTasks([...tasks, formTask]);
+        setTasks([formTask, ...tasks]);
         setFormTask({
             title: "",
             description: "",
@@ -24,27 +41,34 @@ const page = () => {
     
     let renderTasks : JSX.Element[] = [<h2 className="text-xl">No Tasks</h2>];
 
-    renderTasks = tasks.map((task, index) => {
-        return (
-            <div key={`task-${index}`} className="bg-orange-300 w-full aspect-square text-slate-700 rounded-lg p-3 inline-block">
-                <h5 className = "font-semibold text-xl">{task.title}</h5>
-                <h6 className="break-words">{task.description}</h6>
-                <ol>
-                    {task.steps.map((step, i) => {
-                        return (
-                            <li key={`step-${index}-${i}`}>
-                                <input 
-                                type="checkbox"
-                                id={`step-checkbox-${index}-${i}`}
-                                className="mr-2"/>
-                                <label htmlFor={`step-checkbox-${index}-${i}`}>{step}</label>
-                            </li>
-                        );
-                    })}
-                </ol>
-            </div>
-        );
-    });
+    if (tasks.length > 0) {
+        renderTasks = tasks.map((task, index) => {
+            return (
+                <div key={`task-${index}`} 
+                className="bg-orange-300 w-full aspect-square text-slate-700 rounded-lg p-3 inline-block group relative">
+                    <h5 className="font-semibold text-xl">{task.title}</h5>
+                    <button className="hidden group-hover:block absolute top-0 right-0">delete me</button>
+                    <h5 className = "italic text-xl">{!task.title ? "Untitled" : null}</h5>
+                    <h6 className="break-words">{task.description}</h6>
+                    <ol>
+                        {task.steps.map((step, i) => {
+                            return (
+                                <li key={`step-${index}-${i}`} className="align-top">
+                                    <input 
+                                    type="checkbox"
+                                    id={`step-checkbox-${index}-${i}`}
+                                    className=""/>
+                                    <label 
+                                    htmlFor={`step-checkbox-${index}-${i}`}>{step}</label>
+                                </li>
+                            );
+                        })}
+                    </ol>
+                </div>
+            );
+        });
+    }
+
 
     return (
         <>
