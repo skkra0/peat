@@ -1,10 +1,11 @@
 import { useState } from "react";
-
+import Task from './task';
 const TaskForm = ({formTask, setFormTask, handleSubmit}: {formTask: Task, setFormTask: any, handleSubmit: any}) => {
     const [inputs, setInputs] = useState(1);
 
     return (
         <>
+            <h2 className="text-slate-800 text-xl font-bold">New Task</h2>
             <form 
             className="m-1"
             onSubmit={handleSubmit}>
