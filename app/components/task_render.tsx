@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Task from "./task";
 
-const TaskRender = (task: Task, key: string, onDelete: any, onUpdate: any) => {
+const TaskRender = ({task, key, onDelete, onUpdate} : {task: Task, key: string, onDelete: any, onUpdate: any}) => {
   return (
     <div
       key={`task-${key}`}
-      className="bg-orange-300 w-60 aspect-square text-slate-700 rounded-lg pt-5 pl-4 pr-6 inline-block group relative"
+      className="bg-orange-300 w-72 min-h-60 text-slate-700 rounded-lg pt-5 pl-4 pr-6 inline-block group relative"
     >
       <h5 className="font-semibold text-xl overflow-hidden overflow-ellipsis">
         {task.title}

@@ -1,4 +1,5 @@
 "use client";
+import { Poppins, Noto_Sans } from "next/font/google";
 import React, { FormEvent, useEffect, useState } from "react";
 import TaskForm from "./components/task_form";
 import Modal from "./components/modal";
@@ -6,6 +7,8 @@ import TaskRender from "./components/task_render";
 import Task from "./components/task";
 const NAMESPACE = "TODOAPP";
 
+const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
+const noto = Noto_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 const t = () => {
   let tasks = localStorage.getItem(NAMESPACE);
   if (tasks != null) {
@@ -56,8 +59,8 @@ const page = () => {
           />
         </Modal>
       ) : null}
-      <div className="flex justify-between pt-4 pb-3 pl-3 pr-3 h-16 bg-slate-50 text-slate-700">
-        <h1 className="inline-block text-4xl font-bold">To-Do</h1>
+      <div className={`flex justify-between pt-4 pb-3 pl-3 pr-3 h-16 bg-slate-50 text-slate-700 ${poppins.className}`}>
+        <h1 className="inline-block text-4xl">To-Do</h1>
         <button
           onClick={() => setFormOpen(true)}
           className="btn inline-block p-2 font-bold rounded bg-slate-100 hover:bg-slate-300"
@@ -66,11 +69,16 @@ const page = () => {
         </button>
       </div>
       <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
-      <div className="main text-black bg-slate-50 pl-4 pr-4">
+      <div className={`main text-black bg-slate-50 pl-4 pr-4 ${noto.className}`}>
         <div className="grid around pt-5 gap-3">
           {tasks.length > 0 ? (
             tasks.map((task, index) =>
-              TaskRender(task, index.toString(), onDelete, onUpdate),
+              <TaskRender
+                task={task}
+                key={index.toString()}
+                onDelete={onDelete}
+                onUpdate={onUpdate}
+              />
             )
           ) : (
             <h2 className="text-xl">No Tasks</h2>
