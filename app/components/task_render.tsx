@@ -1,18 +1,21 @@
 import { useState } from "react";
 import Task from "./task";
 
-const TaskRender = ({task, key, onDelete, onUpdate} : {task: Task, key: string, onDelete: any, onUpdate: any}) => {
+interface TaskProps {
+  task: Task;
+  k: string;
+  onDelete: (k: string) => void;
+  onUpdate: (task: Task, k: string) => void;
+}
+const TaskRender = ({ task, k, onDelete, onUpdate }: TaskProps) => {
   return (
-    <div
-      key={`task-${key}`}
-      className="bg-orange-300 w-72 min-h-60 text-slate-700 rounded-lg pt-5 pl-4 pr-6 inline-block group relative"
-    >
+    <div className="bg-orange-300 w-72 min-h-60 text-slate-700 rounded-lg pt-5 pl-4 pr-6 inline-block group relative">
       <h5 className="font-semibold text-xl overflow-hidden overflow-ellipsis">
         {task.title}
       </h5>
       <button
         className="hidden group-hover:block absolute top-3 right-3 p-0"
-        onClick={() => onDelete(key)}
+        onClick={() => onDelete(k)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -28,23 +31,20 @@ const TaskRender = ({task, key, onDelete, onUpdate} : {task: Task, key: string, 
       <ol>
         {task.steps.map((step, i) => {
           return (
-            <li key={`step-${key}-${i}`} className="relative mt-2 text-sm">
+            <li key={`step-${k}-${i}`} className="relative mt-2 text-sm">
               <input
                 type="checkbox"
-                id={`step-checkbox-${key}-${i}`}
+                id={`step-checkbox-${k}-${i}`}
                 className="relative appearance-none w-4 h-4 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
                          hover:border-slate-800
                          checked:bg-emerald-500 checked:border-0"
                 onChange={(e) => {
                   task.finished[i] = e.target.checked;
-                  onUpdate(task, key);
+                  onUpdate(task, k);
                 }}
                 checked={task.finished[i]}
               />
-              <label
-                htmlFor={`step-checkbox-${key}-${i}`}
-                className="leading-4"
-              >
+              <label htmlFor={`step-checkbox-${k}-${i}`} className="leading-4">
                 {step}
               </label>
               <svg

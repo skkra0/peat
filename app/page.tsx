@@ -17,7 +17,7 @@ const t = () => {
   return [];
 };
 
-const page = () => {
+const Page = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const page = () => {
   return (
     <>
       {formOpen ? (
-        <Modal setOpen={setFormOpen}>
+        <Modal key="modal" setOpen={setFormOpen}>
           <TaskForm
             formTask={formTask}
             setFormTask={setFormTask}
@@ -59,7 +59,9 @@ const page = () => {
           />
         </Modal>
       ) : null}
-      <div className={`flex justify-between pt-4 pb-3 pl-3 pr-3 h-16 bg-slate-50 text-slate-700 ${poppins.className}`}>
+      <div
+        className={`flex justify-between pt-4 pb-3 pl-3 pr-3 h-16 bg-slate-50 text-slate-700 ${poppins.className}`}
+      >
         <h1 className="inline-block text-4xl">To-Do</h1>
         <button
           onClick={() => setFormOpen(true)}
@@ -69,17 +71,20 @@ const page = () => {
         </button>
       </div>
       <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
-      <div className={`main text-black bg-slate-50 pl-4 pr-4 ${noto.className}`}>
+      <div
+        className={`main text-black bg-slate-50 pl-4 pr-4 ${noto.className}`}
+      >
         <div className="grid around pt-5 gap-3">
           {tasks.length > 0 ? (
-            tasks.map((task, index) =>
+            tasks.map((task, index) => (
               <TaskRender
                 task={task}
-                key={index.toString()}
+                k={index.toString()}
                 onDelete={onDelete}
                 onUpdate={onUpdate}
+                key={`task-${index}`}
               />
-            )
+            ))
           ) : (
             <h2 className="text-xl">No Tasks</h2>
           )}
@@ -89,4 +94,4 @@ const page = () => {
   );
 }; //https://stackoverflow.com/questions/48239687/flexbox-space-between-behavior-combined-with-wrap orz
 
-export default page;
+export default Page;
