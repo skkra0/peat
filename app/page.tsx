@@ -20,14 +20,16 @@ const t = () => {
 const emptyTask = () => new Task("", "", [], "task-" + Date.now().toString());
 
 const Page = () => {
-  const [tasks, setTasks] = useState<Task[]>(t());
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   setTasks(t());
-  // }, []);
+   useEffect(() => {
+     setTasks(t());
+     setIsInitialized(true);
+   }, []);
 
   useEffect(() => {
-    localStorage.setItem(NAMESPACE, JSON.stringify(tasks));
+    if (isInitialized) localStorage.setItem(NAMESPACE, JSON.stringify(tasks));
   }, [tasks]);
 
   const [formTask, setFormTask] = useState<Task>(emptyTask());
