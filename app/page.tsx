@@ -3,7 +3,7 @@ import { Poppins, Noto_Sans } from "next/font/google";
 import React, { FormEvent, useEffect, useState } from "react";
 import TaskForm from "./components/task_form";
 import Modal from "./components/modal";
-import TaskRender from "./components/task_render";
+import TaskItem from "./components/task_item";
 import Task from "./components/task";
 const NAMESPACE = "TODOAPP";
 
@@ -17,37 +17,50 @@ const t = () => {
   return [];
 };
 
+const emptyTask = () => new Task("", "", [], "task-" + Date.now().toString());
+
 const Page = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(t());
+
+  // useEffect(() => {
+  //   setTasks(t());
+  // }, []);
 
   useEffect(() => {
-    setTasks(t());
-  }, []);
-
-  useEffect(() => {
-    if (tasks.length > 0)
-      localStorage.setItem(NAMESPACE, JSON.stringify(tasks));
+    localStorage.setItem(NAMESPACE, JSON.stringify(tasks));
   }, [tasks]);
 
-  const [formTask, setFormTask] = useState<Task>(new Task("", "", []));
+  const [formTask, setFormTask] = useState<Task>(emptyTask());
+  const [isNewTask, setIsNewTask] = useState<boolean>(true);
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setTasks([formTask, ...tasks]);
-    setFormTask(new Task("", "", []));
-    console.log(tasks);
+    if (!isNewTask) {
+      setTasks(tasks.map((t) => (t.key === formTask.key ? formTask : t)));
+    } else {
+      setTasks([formTask, ...tasks]);
+    }
+    setFormTask(emptyTask());
+    setFormOpen(false);
   };
 
-  const onDelete = (key: string) => {
-    setTasks(tasks.filter((_, index) => index.toString() !== key));
+  const onDelete = (task: Task) => {
+    setTasks(tasks.filter((t) => t.key !== task.key));
   };
 
-  const onUpdate = (newTask: Task, key: string) => {
-    setTasks(
-      tasks.map((task, index) => (index.toString() === key ? newTask : task)),
-    );
+  const onUpdate = (newTask: Task) => {
+     setTasks(
+       tasks.map((t) => (t.key === newTask.key ? newTask : t)),
+     );
   };
+  
+  const onEdit = (oldTask: Task) => {
+    setFormTask(oldTask);
+    setIsNewTask(false);
+    setFormOpen(true);
+  };
+
   return (
     <>
       {formOpen ? (
@@ -55,34 +68,41 @@ const Page = () => {
           <TaskForm
             formTask={formTask}
             setFormTask={setFormTask}
+            isNewTask={isNewTask}
             handleSubmit={handleSubmit}
           />
         </Modal>
       ) : null}
+
       <div
         className={`flex justify-between pt-4 pb-3 pl-3 pr-3 h-16 bg-slate-50 text-slate-700 ${poppins.className}`}
       >
         <h1 className="inline-block text-4xl">To-Do</h1>
         <button
-          onClick={() => setFormOpen(true)}
+          onClick={() => {
+            setFormTask(emptyTask());
+            setIsNewTask(true);
+            setFormOpen(true);
+          }}
           className="btn inline-block p-2 font-bold rounded bg-slate-100 hover:bg-slate-300"
         >
           Add task
         </button>
       </div>
+
       <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
       <div
         className={`main text-black bg-slate-50 pl-4 pr-4 ${noto.className}`}
       >
         <div className="grid around pt-5 gap-3">
           {tasks.length > 0 ? (
-            tasks.map((task, index) => (
-              <TaskRender
+            tasks.map((task, _) => (
+              <TaskItem
                 task={task}
-                k={index.toString()}
                 onDelete={onDelete}
                 onUpdate={onUpdate}
-                key={`task-${index}`}
+                onEdit={onEdit}
+                key={task.key}
               />
             ))
           ) : (

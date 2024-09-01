@@ -3,6 +3,7 @@ export default class Task {
   description: string;
   steps: string[];
   finished: boolean[];
+  key: string;
 
   isEmpty(): boolean {
     return (
@@ -10,10 +11,11 @@ export default class Task {
     );
   }
 
-  constructor(t: string, d: string, steps: string[]) {
+  constructor(t: string, d: string, steps: string[], key: string) {
     this.title = t;
     this.description = d;
     this.steps = steps;
     this.finished = steps.map(() => false);
+    this.key = key;
   }
 }

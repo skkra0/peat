@@ -1,19 +1,16 @@
 import { useState } from "react";
 import Task from "./task";
-const TaskForm = ({
-  formTask,
-  setFormTask,
-  handleSubmit,
-}: {
-  formTask: Task;
-  setFormTask: any;
-  handleSubmit: any;
+const TaskForm = ({ formTask, setFormTask, isNewTask, handleSubmit }: {
+formTask: Task;
+setFormTask: any;
+handleSubmit: any;
+isNewTask: boolean;
 }) => {
   const [inputs, setInputs] = useState(1);
 
   return (
     <>
-      <h2 className="text-slate-800 text-xl font-bold">New Task</h2>
+      <h2 className="text-slate-800 text-xl font-bold">{ isNewTask ? "New Task" : "Update Task" }</h2>
       <form className="m-1" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -72,7 +69,7 @@ const TaskForm = ({
             type="submit"
             className="bg-slate-700 text-white rounded mt-2 py-1 px-2"
           >
-            Add Task
+            {isNewTask ? "Add Task" : "Update Task"}
           </button>
         </div>
       </form>
