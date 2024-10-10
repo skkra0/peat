@@ -65,7 +65,7 @@ const Page = () => {
 
   return (
     <>
-      {formOpen ? (
+      {/* {formOpen ? (
         <Modal key="modal" setOpen={setFormOpen}>
           <TaskForm
             formTask={formTask}
@@ -74,43 +74,12 @@ const Page = () => {
             handleSubmit={handleSubmit}
           />
         </Modal>
-      ) : null}
+      ) : null} */}
 
+      
       <div
-        className={`flex justify-between pt-4 pb-3 pl-3 pr-3 h-16 bg-slate-50 text-slate-700 ${poppins.className}`}
-      >
-        <h1 className="inline-block text-4xl">To-Do</h1>
-        <button
-          onClick={() => {
-            setFormTask(emptyTask());
-            setIsNewTask(true);
-            setFormOpen(true);
-          }}
-          className="btn inline-block p-2 font-bold rounded bg-slate-100 hover:bg-slate-300"
-        >
-          Add task
-        </button>
-      </div>
-
-      <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
-      <div
-        className={`main text-black bg-slate-50 pl-4 pr-4 ${noto.className}`}
-      >
-        <div className="grid around pt-5 gap-3">
-          {tasks.length > 0 ? (
-            tasks.map((task, _) => (
-              <TaskItem
-                task={task}
-                onDelete={onDelete}
-                onUpdate={onUpdate}
-                onEdit={onEdit}
-                key={task.key}
-              />
-            ))
-          ) : (
-            <h2 className="text-xl">No Tasks</h2>
-          )}
-        </div>
+        className={`main text-black bg-slate-50 pl-4 pr-4 ${noto.className}`}>
+          hello
       </div>
     </>
   );

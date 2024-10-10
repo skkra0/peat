@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Task from "./task";
+import React from "react";
 const TaskForm = ({ formTask, setFormTask, isNewTask, handleSubmit }: {
 formTask: Task;
 setFormTask: any;
@@ -14,8 +15,10 @@ isNewTask: boolean;
       <form className="m-1" onSubmit={handleSubmit}>
         <input
           type="text"
+          id="list-title"
+          name="list-title"
           className="focus:border-sky-500 outline-sky-500 border-b-2 border-emerald-800 bg-slate-50 py-1 mt-2 w-72 block"
-          placeholder="List Title"
+          placeholder="List Title..."
           value={formTask.title}
           onChange={(e) => {
             setFormTask({
@@ -26,6 +29,7 @@ isNewTask: boolean;
         />
         <textarea
           className="focus:border-sky-500 outline-sky-500 border-emerald-800 border-b-2 bg-slate-50 py-1 mt-2 h-20 w-72 block break-words resize-none"
+          id="description"
           placeholder="List Description"
           value={formTask.description}
           onChange={(e) => {
