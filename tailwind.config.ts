@@ -19,7 +19,7 @@ const config: Config = {
           light: "#F4D4BA",
           dark: "#D39872",
         }
-      }
+      },
     },
   },
   plugins: [],

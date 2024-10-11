@@ -17,11 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={noto.className}>
+      <body className={`h-screen w-full flex flex-col ${noto.className}`}>
       <div
-        className={`flex justify-start pt-4 pb-3 pl-3 pr-3 bg-peat text-stone-900 font-bold ${poppins.className}`}
+        className={`h-24 pt-4 pb-3 pl-3 pr-3 bg-peat text-stone-900 font-bold ${poppins.className}`}
       >
-        <button className="rounded-md mt-2 ml-3 mr-5 hover:bg-peat-dark">
+        <button className="rounded-md mt-2 ml-3 mr-5 float-left hover:bg-peat-dark">
           <svg 
           xmlns="http://www.w3.org/2000/svg"
           fill="none" 
@@ -32,11 +32,13 @@ export default function RootLayout({
             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
-        <h1 className="mt-2 inline-block text-5xl">Peat</h1>
+        <h1 className="mt-2 inline-block text-5xl float-left">Peat</h1>
       </div>
-
       <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
-      {children}
+      <div
+        className="main h-full w-full bg-orange-300 text-black flex flex-row">
+          {children}
+      </div>
       </body>
     </html>
   );
