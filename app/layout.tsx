@@ -36,7 +36,7 @@ export default function RootLayout({
       </div>
       <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
       <div
-        className="main h-full w-full bg-orange-300 text-black border-t border-stone-900 flex flex-row">
+        className="main h-full w-full overflow-x-hidden bg-stone-100 text-black border-t border-stone-900 flex flex-row relative">
           {children}
       </div>
       </body>

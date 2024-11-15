@@ -10,3 +10,13 @@
 .minmax {
   transition: flex-grow 0.5s;
 }
+
+.minmax-button {
+  transition: left 0.4s;
+}
+
+[contenteditable=true]:empty:before {
+  content: attr(aria-placeholder);
+  display: block;
+  color: #94a3b8;
+}
