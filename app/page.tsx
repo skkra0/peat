@@ -1,15 +1,12 @@
 "use client";
-import { Poppins, Noto_Sans } from "next/font/google";
 import classNames from "classnames";
 import React from "react";
 import Editable from "./components/editable";
+import Category from "./components/category";
+import Project from "./components/project";
 const NAMESPACE = "TODOAPP";
 
-const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
-const noto = Noto_Sans({ subsets: ["latin"], weight: ["400", "700"] });
-
-
-
+const generateId = () => `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 const Page = () => {
   enum ListDisplay {
     LEFT_MAX,
@@ -18,28 +15,42 @@ const Page = () => {
   }
 
   const [listDisplay, setListDisplay] = React.useState(ListDisplay.SPLIT);
-
+  const [masterList, setMasterList] = React.useState([ new Category("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", ["a", "b", "c"], [true, false, false], generateId()) ]);
   return (
     <>
-  
-      <div className={classNames("h-full min-w-0 bg-master border border-t-0 border-master-border inline-block basis-0 minmax", 
+      <div className={classNames("h-full min-w-0 text-slate-800 bg-master border border-t-0 border-master-border inline-block basis-0 minmax", 
         { "flex-grow z-20" : listDisplay === ListDisplay.LEFT_MAX},
         { "flex-grow z-10": listDisplay === ListDisplay.SPLIT },
-        {"flex-grow-0 z-0 text-nowrap" : listDisplay === ListDisplay.RIGHT_MAX },
+        {"flex-grow-0 z-0" : listDisplay === ListDisplay.RIGHT_MAX },
       )}>
-          <p>lorem</p>
-          <Editable 
-            className="text-2xl"
-            initial=""
-            onBlur={(content) => console.log(content)}
-            placeholder="New category..."/>
-          <button className={classNames("border-black bg-master-accent rounded-full w-20 h-20 minmax-button absolute bottom-2",
-            {"left-1/4" : listDisplay === ListDisplay.SPLIT || listDisplay === ListDisplay.RIGHT_MAX},
-            {"left-1/2" : listDisplay === ListDisplay.LEFT_MAX},
-          )}>edit</button>
-          
+          <div className="m-0 pt-2 pl-3">
+            <h1 className="text-3xl font-bold mb-6">master list</h1>
+              {
+                masterList.map((cat, _) => <Project
+                cat={cat}
+                onDelete = {(cat) => {}}
+                onUpdate = {(cat) => {
+                  setMasterList(masterList.map((c) => c.key === cat.key ? cat : c));
+                }}
+                key={cat.key}
+                />)
+              }
+              <Editable 
+              className="text-2xl font-semibold italic w-80"
+              initial=""
+              onBlur={(content) => {
+                console.log("master list:" + masterList);
+                setMasterList([...masterList, new Category(content, [], [], generateId())]);
+              }}
+              placeholder="New category..."
+              clearOnBlur
+              />
+            <button className={classNames("border-black bg-master-accent rounded-full w-20 h-20 minmax-button absolute bottom-2",
+              {"left-1/4" : listDisplay === ListDisplay.SPLIT || listDisplay === ListDisplay.RIGHT_MAX},
+              {"left-1/2" : listDisplay === ListDisplay.LEFT_MAX},
+            )}>edit</button>
+          </div>
       </div>
-
       <div 
       className={classNames("w-10 h-full cursor-pointer bg-master border border-t-0 border-l-0 border-master-border flex items-center justify-center",
         { "hidden" : listDisplay === ListDisplay.RIGHT_MAX },
