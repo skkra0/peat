@@ -1,10 +1,10 @@
 "use client";
 import classNames from "classnames";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import Editable from "./components/editable";
 import Category from "./components/category";
 import Project from "./components/project";
-const NAMESPACE = "TODOAPP";
+const NAMESPACE = "PEATAPP";
 
 const generateId = () => `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 const Page = () => {
@@ -14,8 +14,30 @@ const Page = () => {
     RIGHT_MAX
   }
 
+  const t = (key: String) => {
+    let lists = localStorage.getItem(`${NAMESPACE}-${key}`);
+    if (lists !== null) {
+      return JSON.parse(lists);
+    }
+    return [];
+  }
   const [listDisplay, setListDisplay] = React.useState(ListDisplay.SPLIT);
-  const [masterList, setMasterList] = React.useState([ new Category("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", ["a", "b", "c"], [true, false, false], generateId()) ]);
+  const [masterList, setMasterList] = React.useState([] as Category[]);
+  const [isInitialized, setIsInitialized] = React.useState(false);
+  useEffect(() => {
+    setMasterList(t("master"));
+    setIsInitialized(true);
+  }, []);
+
+  useEffect(() => {
+    if (isInitialized) {
+      localStorage.setItem(`${NAMESPACE}-master`, JSON.stringify(masterList));
+      for (let c of masterList) {
+        console.log(c.items);
+      }
+    }
+  }, [masterList]);
+
   return (
     <>
       <div className={classNames("h-full min-w-0 text-slate-800 bg-master border border-t-0 border-master-border inline-block basis-0 minmax", 
@@ -36,11 +58,12 @@ const Page = () => {
                 />)
               }
               <Editable 
-              className="text-2xl font-semibold italic w-80"
+              className="text-2xl font-semibold italic w-max mt-5"
               initial=""
-              onBlur={(content) => {
-                console.log("master list:" + masterList);
-                setMasterList([...masterList, new Category(content, [], [], generateId())]);
+              onBlur={(content: string) => {
+                setMasterList((prevMasterList) => {
+                  return [...prevMasterList, new Category(content, [], [], generateId())];
+                });
               }}
               placeholder="New category..."
               clearOnBlur

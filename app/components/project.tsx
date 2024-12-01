@@ -8,11 +8,17 @@ interface ProjectProps {
 }
 const Project = ({cat, onDelete, onUpdate} : ProjectProps) => {
     return <div>
-        <h2 
-            className="text-xl font-semibold w-80"
-            dangerouslySetInnerHTML={{__html: cat.title}}/>
+        <Editable
+            className="text-2xl font-semibold w-80"
+            initial={cat.title}
+            onBlur={(content: string) => {
+                cat.title = content;
+                onUpdate(cat);
+            }}
+        />
         <ul>
-            {cat.items.map((item, i) => {
+            {
+            cat.items.map((item, i) => {
                 return <li key={`master-item-${cat.key}-${i}`} className="relative mt-2 text-sm">
                     <input
                         type="checkbox"
@@ -26,8 +32,18 @@ const Project = ({cat, onDelete, onUpdate} : ProjectProps) => {
                             onUpdate(cat);
                           }}
                     />
-                    <label htmlFor={`master-item-checkbox-${cat.key}-${i}`} className="leading-4">
-                        {item}
+                    <label 
+                    //htmlFor={`master-item-checkbox-${cat.key}-${i}`}
+                    className="leading-4"
+                    >
+                        <Editable
+                            className="inline-block min-w-52"
+                            initial={item}
+                            onBlur={(content) => {
+                                cat.items[i] = content;
+                                onUpdate(cat);
+                            }}
+                        />
                     </label>
                     <svg
                         className="
@@ -50,10 +66,7 @@ const Project = ({cat, onDelete, onUpdate} : ProjectProps) => {
                 <input
                     type="checkbox"
                     id={`master-${cat.key}-newitem`}
-                    className="relative appearance-none w-4 h-4 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
-                            hover:border-slate-800
-                            checked:bg-emerald-500 checked:border-0"
-                    checked={false}
+                    className="relative appearance-none w-4 h-4 align-sub border-slate-400 border-2 rounded-sm mr-2 shrink-0"
                 />
                 <label className="leading-4">
                     <Editable
