@@ -2,16 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  min-height: 100vh;
-  background-color: rgb(248, 250, 252);
-}
-
-.bg-smoke {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
 .around {
   grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
   justify-items: space-around;
+}
+
+.minmax {
+  transition: flex-grow 0.5s;
+}
+
+.minmax-button {
+  transition: left 0.4s;
+}
+
+[contenteditable=true]:empty:before {
+  content: attr(aria-placeholder);
+  display: block;
+  color: #94a3b8;
 }
