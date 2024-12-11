@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Category from "./category";
 import Editable from "./editable";
 
@@ -5,17 +6,32 @@ interface ProjectProps {
     cat: Category;
     onDelete: (cat: Category) => void;
     onUpdate: (cat: Category) => void;
+    sendCatToDaily?: (cat: Category) => void;
+    sendItemToDaily?: (cat: Category, item: string) => void;
+    master?: boolean;
 }
-const Project = ({cat, onDelete, onUpdate} : ProjectProps) => {
-    return <div>
+const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, master} : ProjectProps) => {
+    return <div className="group">
         <Editable
-            className="text-2xl font-semibold w-80"
+            className="text-2xl inline-block font-semibold"
             initial={cat.title}
             onBlur={(content: string) => {
                 cat.title = content;
                 onUpdate(cat);
             }}
         />
+        <div className="hidden group-hover:inline-block">
+            <button
+                className={classNames("inline border-2 rounded", master ? "border-master-border" : "border-daily-border")}
+                onClick={() => onDelete(cat)}>delete me</button>
+            { master ?
+                <button
+                className="inline border-2 rounded border-master-border"
+                onClick={() => {
+                    sendCatToDaily && sendCatToDaily(cat);
+                }}>send to daily</button> : null }
+        </div>
+        
         <ul>
             {
             cat.items.map((item, i) => {

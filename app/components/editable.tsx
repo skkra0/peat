@@ -38,7 +38,7 @@ const Editable = ({ initial, placeholder, className, onBlur, clearOnBlur }: Edit
 	
 	return (
 		<ContentEditable
-			className={classNames(className, "hover:italic", "hover:border-blue-600", "border", "border-transparent")}
+			className={classNames(className, "hover:italic focus:italic", "hover:border-blue-600", "border", "border-transparent")}
 			aria-placeholder={placeholder}
 			onChange={onChange}
 			onBlur={(e) => {
