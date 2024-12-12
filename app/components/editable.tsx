@@ -15,16 +15,13 @@ const Editable = ({ initial, placeholder, className, onBlur, clearOnBlur }: Edit
 	const [content, setContent] = useState(initial);
     const contentRef = useRef(initial);
 
-	const onChange = useCallback((e: { currentTarget : { innerHTML: string } }) => {
-		const sanitizeConf = {
-			allowedTags: [],
-			allowedAttributes: {},
-			disallowedTagMode: 'discard',
-		};
+	useEffect(() => {
+		setContent(initial);
+	}, [initial]);
 
-		const sanitized = sanitizeHtml(e.currentTarget.innerHTML, sanitizeConf).trim();
-		setContent(sanitized);
-	}, []);
+	useEffect(() => {
+		contentRef.current = content;
+	}, [content]);
 
 	const onKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter") {
@@ -32,17 +29,14 @@ const Editable = ({ initial, placeholder, className, onBlur, clearOnBlur }: Edit
 			(e.currentTarget as HTMLElement).blur();
 		}
 	}
-	useEffect(() => {
-		contentRef.current = content;
-	}, [content]);
 	
 	return (
 		<ContentEditable
-			className={classNames(className, "hover:italic focus:italic", "hover:border-blue-600", "border", "border-transparent")}
+			className={classNames(className, "hover:italic focus:italic", "hover:border-blue-600", "border", "border-transparent", "cursor-text", "pr-2")}
 			aria-placeholder={placeholder}
-			onChange={onChange}
+			onChange={(e) => setContent(e.currentTarget.innerHTML)}
 			onBlur={(e) => {
-				let newContent = contentRef.current.replace(/<br>/g, "").replace(/&nbsp;/g, " ").trim();
+				let newContent = contentRef.current;
 				if (newContent !== "") {
 					onBlur(newContent);
 				}

@@ -15,16 +15,25 @@ const Page = () => {
   }
 
   const t = (key: String) => {
+    localStorage.setItem(`${NAMESPACE}-master`, JSON.stringify([]));
+    localStorage.setItem(`${NAMESPACE}-daily`, JSON.stringify([]));
     let lists = localStorage.getItem(`${NAMESPACE}-${key}`);
     if (lists !== null) {
       return JSON.parse(lists);
     }
     return [];
   }
+
   const [listDisplay, setListDisplay] = React.useState(ListDisplay.SPLIT);
   const [masterList, setMasterList] = React.useState([] as Category[]);
   const [dailyList, setDailyList] = React.useState([] as Category[]);
   const [isInitialized, setIsInitialized] = React.useState(false);
+
+  const handleUpdate = (cat : Category) => {
+    setMasterList(prevMasterList => prevMasterList.map((c) => c.key === cat.key ? cat : c));
+    setDailyList(prevDailyList => prevDailyList.map((c) => c.key === cat.key ? cat : c));
+  }
+
   useEffect(() => {
     setMasterList(t("master"));
     setDailyList(t("daily"));
@@ -58,16 +67,15 @@ const Page = () => {
                 onDelete = {(cat) => {
                   setMasterList(masterList.filter((c) => c.key !== cat.key));
                 }}
-                onUpdate = {(cat) => {
-                  setMasterList(masterList.map((c) => c.key === cat.key ? cat : c));
-                }}
+                onUpdate = {handleUpdate}
                 key={cat.key}
                 sendCatToDaily={(cat) => {
-                    if (dailyList.find((c) => c.key === cat.key) === undefined) {
-                      let newDailyList = [...dailyList];
-                      newDailyList.splice(masterList.findIndex((c) => c.key === cat.key), 0, cat);
-                      setDailyList(newDailyList);
-                    }
+                    setDailyList((prevDailyList) => {
+                      if (prevDailyList.find((c) => c.key === cat.key) === undefined) {
+                        return [...prevDailyList, cat];
+                      }
+                      return prevDailyList;
+                    });
                   }
                 }
                 master
@@ -142,16 +150,15 @@ const Page = () => {
         <div className="mt-0 pt-2 pl-3">
           <h1 className="text-3xl font-bold mb-6">daily list</h1>
           {
-            dailyList.map((cat, _) => <Project
+            dailyList.map((cat, _) => {
+            return <Project
             cat={cat}
             onDelete = {(cat) => {
               setDailyList(dailyList.filter((c) => c.key !== cat.key));
             }}
-            onUpdate = {(cat) => {
-              setDailyList(dailyList.map((c) => c.key === cat.key ? cat : c));
-            }}
+            onUpdate = {handleUpdate}
             key={cat.key}
-            />)
+            />})
           }
           <Editable 
           className="text-2xl font-semibold italic w-max"

@@ -35,10 +35,10 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
         <ul>
             {
             cat.items.map((item, i) => {
-                return <li key={`master-item-${cat.key}-${i}`} className="relative mt-2 text-sm">
+                return <li key={(master ? "master" : "daily") + `-item-${cat.key}-${i}`} className="relative mt-2 text-sm">
                     <input
                         type="checkbox"
-                        id={`master-item-checkbox-${cat.key}-${i}`}
+                        id={(master ? "master" : "daily") + `-item-checkbox-${cat.key}-${i}`}
                         className="relative appearance-none w-4 h-4 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
                                 hover:border-slate-800
                                 checked:bg-emerald-500 checked:border-0"
@@ -81,7 +81,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
             <li className="relative mt-2 text-sm">
                 <input
                     type="checkbox"
-                    id={`master-${cat.key}-newitem`}
+                    id={(master ? "master" : "daily") + `-${cat.key}-newitem`}
                     className="relative appearance-none w-4 h-4 align-sub border-slate-400 border-2 rounded-sm mr-2 shrink-0"
                 />
                 <label className="leading-4">
