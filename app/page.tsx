@@ -15,8 +15,6 @@ const Page = () => {
   }
 
   const t = (key: String) => {
-    localStorage.setItem(`${NAMESPACE}-master`, JSON.stringify([]));
-    localStorage.setItem(`${NAMESPACE}-daily`, JSON.stringify([]));
     let lists = localStorage.getItem(`${NAMESPACE}-${key}`);
     if (lists !== null) {
       return JSON.parse(lists);
@@ -54,13 +52,13 @@ const Page = () => {
 
   return (
     <>
-      <div className={classNames("h-full min-w-0 text-slate-800 bg-master border border-t-0 border-master-border inline-block basis-0 overflow-scroll minmax", 
+      <div className={classNames("h-full min-w-0 border border-t-0 border-stone-700 basis-0 overflow-scroll minmax", 
         { "flex-grow z-20" : listDisplay === ListDisplay.LEFT_MAX},
         { "flex-grow z-10": listDisplay === ListDisplay.SPLIT },
         {"flex-grow-0 z-0" : listDisplay === ListDisplay.RIGHT_MAX },
       )}>
           <div className="m-0 pt-2 pl-3">
-            <h1 className="text-3xl font-bold mb-6">master list</h1>
+            <h1 className="text-3xl font-bold mb-6 mt-3">Master List</h1>
               {
                 masterList.map((cat, _) => <Project
                 cat={cat}
@@ -98,8 +96,8 @@ const Page = () => {
             )}>edit</button>
           </div>
       </div>
-      <div 
-      className={classNames("w-10 h-full cursor-pointer bg-master border border-t-0 border-l-0 border-master-border flex items-center justify-center",
+      <button 
+      className={classNames("w-10 h-full cursor-pointer border border-t-0 border-l-0 border-stone-700 flex items-center justify-center",
         { "hidden" : listDisplay === ListDisplay.RIGHT_MAX },
       )}
       onClick={() => { 
@@ -119,9 +117,9 @@ const Page = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
           </svg>
 
-      </div>
-      <div 
-      className={classNames("w-10 h-full z-10 cursor-pointer bg-daily border-t-0 border-r-0 border-daily-border flex items-center justify-center",
+      </button>
+      <button 
+      className={classNames("w-10 h-full z-10 cursor-pointer border-t-0 border-r-0 border-stone-700 flex items-center justify-center",
         { "hidden" : listDisplay === ListDisplay.LEFT_MAX },
       )}
       onClick={() => {
@@ -141,14 +139,14 @@ const Page = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
 
-      </div>
-      <div className={classNames("h-full min-w-0 bg-daily border border-t-0 border-daily-border inline-block basis-0 minmax overflow-scroll",
+      </button>
+      <div className={classNames("h-full min-w-0 border border-t-0 border-stone-700 basis-0 minmax overflow-scroll",
         { "flex-grow z-20" : listDisplay === ListDisplay.RIGHT_MAX },
         { "flex-grow z-10": listDisplay === ListDisplay.SPLIT },
         {"flex-grow-0 z-0" : listDisplay === ListDisplay.LEFT_MAX },
       )}>
         <div className="mt-0 pt-2 pl-3">
-          <h1 className="text-3xl font-bold mb-6">daily list</h1>
+          <h1 className="text-3xl font-bold mb-6 mt-3">Today</h1>
           {
             dailyList.map((cat, _) => {
             return <Project

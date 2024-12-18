@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`h-screen w-full flex flex-col ${noto.className}`}>
       <div
-        className={`h-24 pt-4 pb-3 pl-3 pr-3 bg-peat text-stone-900 font-bold ${poppins.className}`}
+        className={`h-24 pt-4 pb-3 pl-3 pr-3 bg-peat text-stone-800 font-bold ${poppins.className}`}
       >
         <button className="rounded-md mt-2 ml-3 mr-5 float-left hover:bg-peat-dark">
           <svg 
@@ -28,7 +28,7 @@ export default function RootLayout({
           viewBox="0 0 24 24"
           strokeWidth={2}
           stroke="currentColor"
-          className="size-12 text-stone-900 hover:cursor-pointer">
+          className="size-12 text-inherit hover:cursor-pointer">
             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
@@ -36,7 +36,7 @@ export default function RootLayout({
       </div>
       <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
       <div
-        className="main h-full w-full overflow-x-hidden bg-stone-100 text-black border-t border-stone-900 flex flex-row relative">
+        className="main h-full w-full overflow-x-hidden bg-slate-50 text-stone-800 border-t border-stone-700 flex flex-row relative">
           {children}
       </div>
       </body>

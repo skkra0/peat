@@ -11,7 +11,7 @@ interface ProjectProps {
     master?: boolean;
 }
 const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, master} : ProjectProps) => {
-    return <div className="group">
+    return <div className="group mb-3">
         <Editable
             className="text-2xl inline-block font-semibold"
             initial={cat.title}
@@ -39,7 +39,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                     <input
                         type="checkbox"
                         id={(master ? "master" : "daily") + `-item-checkbox-${cat.key}-${i}`}
-                        className="relative appearance-none w-4 h-4 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
+                        className="relative appearance-none w-5 h-5 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
                                 hover:border-slate-800
                                 checked:bg-emerald-500 checked:border-0"
                         checked={cat.finished[i]}
@@ -50,10 +50,10 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                     />
                     <label 
                     //htmlFor={`master-item-checkbox-${cat.key}-${i}`}
-                    className="leading-4"
+                    className="leading-7"
                     >
                         <Editable
-                            className="inline-block min-w-52"
+                            className="text-lg inline-block min-w-52"
                             initial={item}
                             onBlur={(content) => {
                                 cat.items[i] = content;
@@ -63,7 +63,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                     </label>
                     <svg
                         className="
-                                absolute left-0 top-0 w-4 h-4 hidden align-sub text-white pointer-events-none
+                                absolute left-0 top-0 w-5 h-7 hidden align-sub text-white pointer-events-none
                                 peer-checked:block"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -82,11 +82,11 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                 <input
                     type="checkbox"
                     id={(master ? "master" : "daily") + `-${cat.key}-newitem`}
-                    className="relative appearance-none w-4 h-4 align-sub border-slate-400 border-2 rounded-sm mr-2 shrink-0"
+                    className="relative appearance-none w-5 h-5 align-sub border-slate-400 border-2 rounded-sm mr-2 shrink-0"
                 />
-                <label className="leading-4">
+                <label className="leading-7">
                     <Editable
-                        className="inline-block"
+                        className="text-lg inline-block"
                         initial=""
                         placeholder="New item..."
                         onBlur={(content) => {
