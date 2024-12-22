@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import Category from "./category";
+import { Category } from "./types";
 import Editable from "./editable";
 
 interface ProjectProps {
@@ -11,7 +11,7 @@ interface ProjectProps {
     master?: boolean;
 }
 const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, master} : ProjectProps) => {
-    return <div className="group mb-3">
+    return <div className={classNames("group mb-3 p-3 rounded-md max-w-4xl min-w-96", master ? "bg-master" : "bg-daily")}>
         <Editable
             className="text-2xl inline-block font-semibold"
             initial={cat.title}
@@ -40,8 +40,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                         type="checkbox"
                         id={(master ? "master" : "daily") + `-item-checkbox-${cat.key}-${i}`}
                         className="relative appearance-none w-5 h-5 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
-                                hover:border-slate-800
-                                checked:bg-emerald-500 checked:border-0"
+                                hover:border-slate-800"
                         checked={cat.finished[i]}
                         onChange={(e) => {
                             cat.finished[i] = e.target.checked;
@@ -53,7 +52,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                     className="leading-7"
                     >
                         <Editable
-                            className="text-lg inline-block min-w-52"
+                            className="text-lg inline min-w-52"
                             initial={item}
                             onBlur={(content) => {
                                 cat.items[i] = content;
@@ -63,7 +62,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                     </label>
                     <svg
                         className="
-                                absolute left-0 top-0 w-5 h-7 hidden align-sub text-white pointer-events-none
+                                absolute left-0 top-0 w-5 h-8 hidden align-sub text-slate-600 pointer-events-none
                                 peer-checked:block"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -86,7 +85,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                 />
                 <label className="leading-7">
                     <Editable
-                        className="text-lg inline-block"
+                        className={classNames("text-lg inline-block", master ? "before:text-white" : "")}
                         initial=""
                         placeholder="New item..."
                         onBlur={(content) => {

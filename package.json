@@ -7,8 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "electron": "electron ."
+    "lint": "next lint"
   },
   "dependencies": {
     "classnames": "^2.5.1",
@@ -25,7 +24,6 @@
     "@types/react-dom": "^18",
     "@types/sanitize-html": "^2.13.0",
     "autoprefixer": "^10.0.1",
-    "electron": "^33.2.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",

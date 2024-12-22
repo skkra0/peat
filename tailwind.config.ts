@@ -20,14 +20,14 @@ const config: Config = {
           dark: "#D39872",
         },
         master: {
-          DEFAULT: '#F0FDF4',
+          DEFAULT: '#8fdc89',
           light: '#F9FFED',
           border: '#022C22',
           accent: '#34D399',
           dark: '#365E35',
         },
         daily: {
-          DEFAULT: "#FFFBEB",
+          DEFAULT: "#eac88c",
           light: "#FDEADC",
           border: "#B38D4D",
           accent: "#D97706",

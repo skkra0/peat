@@ -1,9 +1,8 @@
 "use client";
 import classNames from "classnames";
-import React, { useCallback, useEffect } from "react";
-import Editable from "./components/editable";
-import Category from "./components/category";
-import Project from "./components/project";
+import { useEffect, useState } from "react";
+import {Category, ListType} from "./components/types";
+import List from "./components/list";
 const NAMESPACE = "PEATAPP";
 
 const generateId = () => `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -22,16 +21,31 @@ const Page = () => {
     return [];
   }
 
-  const [listDisplay, setListDisplay] = React.useState(ListDisplay.SPLIT);
-  const [masterList, setMasterList] = React.useState([] as Category[]);
-  const [dailyList, setDailyList] = React.useState([] as Category[]);
-  const [isInitialized, setIsInitialized] = React.useState(false);
+  const [listDisplay, setListDisplay] = useState(ListDisplay.SPLIT);
+  const [masterList, setMasterList] = useState([] as Category[]);
+  const [dailyList, setDailyList] = useState([] as Category[]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const handleUpdate = (cat : Category) => {
     setMasterList(prevMasterList => prevMasterList.map((c) => c.key === cat.key ? cat : c));
     setDailyList(prevDailyList => prevDailyList.map((c) => c.key === cat.key ? cat : c));
   }
 
+  const addToList = (cat: Category, listType: ListType) => {
+    if (listType === 'master') {
+      setMasterList(prevMasterList => [...prevMasterList, cat]);
+    } else if (listType === 'daily') {
+      setDailyList(prevDailyList => [...prevDailyList, cat]);
+    }
+  }
+
+  const deleteFromList = (cat: Category, listType: ListType) => {
+    if (listType === 'master') {
+      setMasterList(prevMasterList => prevMasterList.filter((c) => c.key !== cat.key));
+    } else if (listType === 'daily') {
+      setDailyList(prevDailyList => prevDailyList.filter((c) => c.key !== cat.key));
+    }
+  }
   useEffect(() => {
     setMasterList(t("master"));
     setDailyList(t("daily"));
@@ -52,52 +66,33 @@ const Page = () => {
 
   return (
     <>
-      <div className={classNames("h-full min-w-0 border border-t-0 border-stone-700 basis-0 overflow-scroll minmax", 
-        { "flex-grow z-20" : listDisplay === ListDisplay.LEFT_MAX},
-        { "flex-grow z-10": listDisplay === ListDisplay.SPLIT },
-        {"flex-grow-0 z-0" : listDisplay === ListDisplay.RIGHT_MAX },
+      <div className={classNames("w-full min-h-0 md:h-full md:min-w-0 justify-start border border-t-0 border-stone-700 basis-0 overflow-scroll minmax", 
+        { "flex-grow" : listDisplay === ListDisplay.LEFT_MAX || listDisplay === ListDisplay.SPLIT },
+        {"flex-grow-0" : listDisplay === ListDisplay.RIGHT_MAX },
       )}>
-          <div className="m-0 pt-2 pl-3">
-            <h1 className="text-3xl font-bold mb-6 mt-3">Master List</h1>
-              {
-                masterList.map((cat, _) => <Project
-                cat={cat}
-                onDelete = {(cat) => {
-                  setMasterList(masterList.filter((c) => c.key !== cat.key));
-                }}
-                onUpdate = {handleUpdate}
-                key={cat.key}
-                sendCatToDaily={(cat) => {
-                    setDailyList((prevDailyList) => {
-                      if (prevDailyList.find((c) => c.key === cat.key) === undefined) {
-                        return [...prevDailyList, cat];
-                      }
-                      return prevDailyList;
-                    });
+            <List
+              title="Master List"
+              listType="master"
+              categories={masterList}
+              updateCategoryGlobal={handleUpdate}
+              addCategory={addToList}
+              deleteCategory={deleteFromList}
+              transferCategory={(cat : Category) => {
+                setDailyList((prevDailyList) => {
+                  if (prevDailyList.find((c) => c.key === cat.key) === undefined) {
+                    return [...prevDailyList, cat];
                   }
-                }
-                master
-                />)
-              }
-              <Editable 
-              className="text-2xl font-semibold italic w-max"
-              initial=""
-              onBlur={(content: string) => {
-                setMasterList((prevMasterList) => {
-                  return [...prevMasterList, new Category(content, [], [], generateId())];
+                  return prevDailyList;
                 });
               }}
-              placeholder="New category..."
-              clearOnBlur
-              />
-            <button className={classNames("border-black bg-master-accent rounded-full w-20 h-20 minmax-button absolute bottom-2",
-              {"left-1/4" : listDisplay === ListDisplay.SPLIT || listDisplay === ListDisplay.RIGHT_MAX},
-              {"left-1/2" : listDisplay === ListDisplay.LEFT_MAX},
+            />
+          <button className={classNames("hidden md:block border-black bg-master-accent rounded-full w-20 h-20 minmax-button fixed bottom-2 left-1/2 transform -translate-x-1/2",
+              {"md:left-1/4" : listDisplay === ListDisplay.SPLIT },
+              {"md:hidden" : listDisplay === ListDisplay.RIGHT_MAX},
             )}>edit</button>
-          </div>
       </div>
       <button 
-      className={classNames("w-10 h-full cursor-pointer border border-t-0 border-l-0 border-stone-700 flex items-center justify-center",
+      className={classNames("h-10 w-full md:w-10 md:h-full cursor-pointer border border-stone-700 flex items-center justify-center",
         { "hidden" : listDisplay === ListDisplay.RIGHT_MAX },
       )}
       onClick={() => { 
@@ -113,13 +108,13 @@ const Page = () => {
           viewBox="0 0 24 24"
           strokeWidth={2.5}
           stroke="currentColor"
-          className="size-10">
+          className="size-10 rotate-90 md:rotate-0">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
           </svg>
 
       </button>
       <button 
-      className={classNames("w-10 h-full z-10 cursor-pointer border-t-0 border-r-0 border-stone-700 flex items-center justify-center",
+      className={classNames("h-10 w-full md:w-10 md:h-full cursor-pointer border border-stone-700 flex items-center justify-center",
         { "hidden" : listDisplay === ListDisplay.LEFT_MAX },
       )}
       onClick={() => {
@@ -135,43 +130,26 @@ const Page = () => {
         viewBox="0 0 24 24"
         strokeWidth={2.5}
         stroke="currentColor"
-        className="size-10">
+        className="size-10 rotate-90 md:rotate-0">
           <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
 
       </button>
-      <div className={classNames("h-full min-w-0 border border-t-0 border-stone-700 basis-0 minmax overflow-scroll",
-        { "flex-grow z-20" : listDisplay === ListDisplay.RIGHT_MAX },
-        { "flex-grow z-10": listDisplay === ListDisplay.SPLIT },
-        {"flex-grow-0 z-0" : listDisplay === ListDisplay.LEFT_MAX },
+      <div className={classNames("h-full min-w-0 border border-stone-700 basis-0 minmax overflow-scroll",
+        { "flex-grow" : listDisplay === ListDisplay.RIGHT_MAX || listDisplay === ListDisplay.SPLIT },
+        {"flex-grow-0" : listDisplay === ListDisplay.LEFT_MAX },
       )}>
-        <div className="mt-0 pt-2 pl-3">
-          <h1 className="text-3xl font-bold mb-6 mt-3">Today</h1>
-          {
-            dailyList.map((cat, _) => {
-            return <Project
-            cat={cat}
-            onDelete = {(cat) => {
-              setDailyList(dailyList.filter((c) => c.key !== cat.key));
-            }}
-            onUpdate = {handleUpdate}
-            key={cat.key}
-            />})
-          }
-          <Editable 
-          className="text-2xl font-semibold italic w-max"
-          initial=""
-          onBlur={(content: string) => {
-            setDailyList((prevDailyList) => {
-              return [...prevDailyList, new Category(content, [], [], generateId())];
-            });
-          }}
-          placeholder="New category..."
-          clearOnBlur/>
-        </div>
-        <button className={classNames("border-black bg-daily-accent rounded-full w-20 h-20 minmax-button absolute bottom-2",
-          {"left-3/4" : listDisplay === ListDisplay.SPLIT || listDisplay === ListDisplay.LEFT_MAX},
-          {"left-1/2" : listDisplay === ListDisplay.RIGHT_MAX},
+        <List
+          title="Today"
+          listType="daily"
+          categories={dailyList}
+          updateCategoryGlobal={handleUpdate}
+          addCategory={addToList}
+          deleteCategory={deleteFromList}
+        />
+        <button className={classNames("hidden md:block border-black bg-daily-accent rounded-full w-20 h-20 minmax-button fixed bottom-2 left-1/2 -translate-x-1/2",
+          {"left-3/4" : listDisplay === ListDisplay.SPLIT},
+          {"md:hidden" : listDisplay === ListDisplay.LEFT_MAX},
         )}>edit</button>
       </div>
     </>

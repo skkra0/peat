@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Poppins, Noto_Sans } from "next/font/google";
+import { Nunito, Noto_Sans } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "700"] });
+const nunito = Nunito({ subsets: ["latin"], weight: ["400", "500", "700"] });
 const noto = Noto_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`h-screen w-full flex flex-col ${noto.className}`}>
       <div
-        className={`h-24 pt-4 pb-3 pl-3 pr-3 bg-peat text-stone-800 font-bold ${poppins.className}`}
+        className={`h-24 pt-4 pb-3 pl-3 pr-3 bg-peat text-stone-800 font-bold ${nunito.className}`}
       >
         <button className="rounded-md mt-2 ml-3 mr-5 float-left hover:bg-peat-dark">
           <svg 
@@ -36,7 +36,7 @@ export default function RootLayout({
       </div>
       <div className="bg-gradient-to-r from-emerald-600 to-amber-500 h-2"></div>
       <div
-        className="main h-full w-full overflow-x-hidden bg-slate-50 text-stone-800 border-t border-stone-700 flex flex-row relative">
+        className="main h-full w-full overflow-x-hidden bg-slate-50 text-stone-800 border-t border-stone-700 flex flex-col md:flex-row relative">
           {children}
       </div>
       </body>

@@ -1,4 +1,4 @@
-export default class Category {
+export class Category {
     title: string;
     items: string[];
     finished: boolean[];
@@ -15,3 +15,5 @@ export default class Category {
         this.key = key;
     }
 }
+
+export type ListType = 'master' | 'daily';
