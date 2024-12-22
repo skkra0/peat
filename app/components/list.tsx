@@ -1,6 +1,5 @@
 "use client";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
 import { Category, ListType } from "./types";
 import Project from "./project";
 import Editable from "./editable";
@@ -19,19 +18,13 @@ interface ListProps {
 const generateId = () => `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
 const List = ({title, listType, categories, updateCategoryGlobal, addCategory, deleteCategory, transferCategory, className} : ListProps) => {
-    const [list, setList] = useState(categories);
-
-    useEffect(() => {
-        setList(categories);
-    }, [categories]);
-
 
     return (
         <div className={classNames(className, "w-fit pl-5 pr-5 flex flex-col items-start mx-auto")}>
             <h1 className="text-3xl font-bold mb-1 mt-3">{title}</h1>
             <hr className="w-full border-1 border-stone-600 mb-6"/>
             {
-                list.map((cat, _) => <Project
+                categories.map((cat, _) => <Project
                     cat={cat}
                     onDelete = {(cat: Category) => deleteCategory(cat, listType)}
                     onUpdate = {updateCategoryGlobal}

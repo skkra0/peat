@@ -31,6 +31,7 @@ const Editable = ({ initial, placeholder, className, onBlur, clearOnBlur }: Edit
 			if (e.key === "b" || e.key === "i") {
 				e.preventDefault();
 				document.execCommand(e.key === "b" ? "bold" : "italic");
+				console.log(e.key);
 			}
 		}
 	}
@@ -39,6 +40,7 @@ const Editable = ({ initial, placeholder, className, onBlur, clearOnBlur }: Edit
 		const sanitizeConf = {
 			allowedTags: ["b", "i", "em", "strong", "a"],
 			allowedAttributes: { "a": ["href"] },
+			disallowedTagMode: "discard",
 		}
 
 		let sanitized = sanitizeHtml(e.currentTarget.innerHTML, sanitizeConf);
