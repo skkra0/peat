@@ -31,7 +31,6 @@ const Editable = ({ initial, placeholder, className, onBlur, clearOnBlur }: Edit
 			if (e.key === "b" || e.key === "i") {
 				e.preventDefault();
 				document.execCommand(e.key === "b" ? "bold" : "italic");
-				console.log(e.key);
 			}
 		}
 	}
@@ -49,7 +48,7 @@ const Editable = ({ initial, placeholder, className, onBlur, clearOnBlur }: Edit
 	}, []);
 	return (
 		<ContentEditable
-			className={classNames(className, "hover:border-blue-600 focus:outline-blue-600", "border", "border-transparent", "cursor-text", "pr-2")}
+			className={classNames(className, "hover:border-blue-600 focus:outline-blue-600 border border-transparent cursor-text break-all hyphens-auto pr-2")}
 			aria-placeholder={placeholder}
 			onChange={onChange}
 			onBlur={() => {
