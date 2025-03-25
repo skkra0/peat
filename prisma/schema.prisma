@@ -16,17 +16,23 @@ datasource db {
 model User {
   id       Int    @id @default(autoincrement())
   email    String @unique @db.VarChar(100)
-  name     String @db.VarChar(100)
-  password String
-  projects Project[]
+  lists    ListInfo[]
 }
 
-model Project {
+model ListInfo {
+  id       Int       @id @default(autoincrement())
+  type     String    @db.VarChar(100)
+  date     DateTime  @default(now())
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id])
+  projects ProjectInfo[]
+}
+
+model ProjectInfo {
   id          Int       @id @default(autoincrement())
   title       String    @db.VarChar(100)
   items       String[]
   finished    Boolean[]
-  projectType String    @db.VarChar(100)
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  listId      Int
+  list       ListInfo      @relation(fields: [listId], references: [id])
 }

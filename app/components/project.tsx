@@ -1,14 +1,14 @@
 import classNames from "classnames";
-import { Category } from "./types";
 import Editable from "./editable";
 import { useEffect, useRef } from "react";
+import { ProjectInfo } from "@prisma/client";
 
 interface ProjectProps {
-    cat: Category;
-    onDelete: (cat: Category) => void;
-    onUpdate: (cat: Category) => void;
-    sendCatToDaily?: (cat: Category) => void;
-    sendItemToDaily?: (cat: Category, item: string) => void;
+    cat: ProjectInfo;
+    onDelete: (cat: ProjectInfo) => void;
+    onUpdate: (cat: ProjectInfo) => void;
+    sendCatToDaily?: (cat: ProjectInfo) => void;
+    sendItemToDaily?: (cat: ProjectInfo, item: string) => void;
     master?: boolean;
 }
 const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, master} : ProjectProps) => {
@@ -16,12 +16,12 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
     useEffect(() => {
         catRef.current = cat;
     }, [cat]);
-    return <div className={classNames("group mb-3 p-3 rounded-md max-w-2xl min-w-96", master ? "bg-master" : "bg-daily")}>
+    return <div className={classNames("group mb-3 p-3 rounded-md max-w-xl min-w-[32rem]", master ? "bg-master" : "bg-daily")}>
         <Editable
-            className="text-2xl inline-block font-semibold"
+            className="text-2xl inline-block"
             initial={cat.title}
             onBlur={(content: string) => {
-                onUpdate({...catRef.current, title: content} as Category);
+                onUpdate({...catRef.current, title: content});
             }}
         />  
         <div className="hidden group-hover:inline-block">
@@ -39,18 +39,18 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
         <ul>
             {
             cat.items.map((item, i) => {
-                return <li key={(master ? "master" : "daily") + `-item-${cat.key}-${i}`} className="relative mt-2 text-sm">
+                return <li key={(master ? "master" : "daily") + `-item-${cat.id}-${i}`} className="relative">
                     <input
                         type="checkbox"
-                        id={(master ? "master" : "daily") + `-item-checkbox-${cat.key}-${i}`}
-                        className="relative appearance-none w-5 h-5 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
+                        id={(master ? "master" : "daily") + `-item-checkbox-${cat.id}-${i}`}
+                        className="relative appearance-none w-4 h-4 align-sub border-slate-600 border-2 rounded-sm mr-2 shrink-0 peer
                                 hover:border-slate-800"
                         checked={cat.finished[i]}
                         onChange={(e) => {
                             onUpdate(
                                 {...catRef.current,
                                     finished: cat.finished.map((f, j) => j === i ? e.target.checked : f)
-                                } as Category
+                                }
                             );
                           }}
                     />
@@ -59,13 +59,13 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                     className="leading-7"
                     >
                         <Editable
-                            className="text-lg inline min-w-52"
+                            className="text-md inline min-w-52"
                             initial={item}
                             onBlur={(content) => {
                                 onUpdate({
                                     ...catRef.current,
                                     items: catRef.current.items.map((it, j) => j === i ? content : it)
-                                    } as Category
+                                    }
                                 );
                             }}
                         />
@@ -90,7 +90,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
             <li className="relative mt-2 text-sm">
                 <input
                     type="checkbox"
-                    id={(master ? "master" : "daily") + `-${cat.key}-newitem`}
+                    id={(master ? "master" : "daily") + `-${cat.id}-newitem`}
                     className="relative appearance-none w-5 h-5 align-sub border-slate-400 border-2 rounded-sm mr-2 shrink-0"
                 />
                 <label className="leading-7">
@@ -102,7 +102,7 @@ const Project = ({cat, onDelete, onUpdate, sendCatToDaily, sendItemToDaily, mast
                             onUpdate({...catRef.current,
                                 items: [...catRef.current.items, content],
                                 finished: [...catRef.current.finished, false]
-                            } as Category
+                            }
                         );
                         }}
                         clearOnBlur

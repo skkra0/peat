@@ -15,9 +15,9 @@ const config: Config = {
       },
       colors: {
         peat: {
-          DEFAULT: "#EDC5AB",
+          DEFAULT: "#db8c57",
           light: "#F4D4BA",
-          dark: "#D39872",
+          dark: "#61391f",
         },
         master: {
           DEFAULT: '#8fdc89',
