@@ -4,30 +4,33 @@ import List from './list';
 import classNames from 'classnames';
 import { ProjectInfo } from '@prisma/client';
 import { ListType } from './types';
+import { updateProjectInfo } from '@/lib/actions';
 enum ListDisplay {
     LEFT_MAX,
     SPLIT,
     RIGHT_MAX
 }
 
-const NAMESPACE = "PEATAPP";
-
 const SplitContainer = ({ lists }: { lists: ProjectInfo[][] }) => {
-    const t = (key: String) => {
-        let lists = localStorage.getItem(`${NAMESPACE}-${key}`);
-        if (lists !== null) {
-            return JSON.parse(lists);
-        }
-        return [];
-    }
+    // const t = (key: String) => {
+    //     let lists = localStorage.getItem(`${NAMESPACE}-${key}`);
+    //     if (lists !== null) {
+    //         return JSON.parse(lists);
+    //     }
+    //     return [];
+    // }
 
     const [listDisplay, setListDisplay] = useState(ListDisplay.SPLIT);
     const [masterList, setMasterList] = useState(lists[0]);
     const [dailyList, setDailyList] = useState(lists[1]);
-    const [isInitialized, setIsInitialized] = useState(false);
     const handleUpdate = (cat: ProjectInfo) => {
         setMasterList(prevMasterList => prevMasterList.map((c) => c.id === cat.id ? cat : c));
         setDailyList(prevDailyList => prevDailyList.map((c) => c.id === cat.id ? cat : c));
+        try {
+            updateProjectInfo(cat);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     const addToList = (cat: ProjectInfo, listType: ListType) => {
@@ -45,23 +48,18 @@ const SplitContainer = ({ lists }: { lists: ProjectInfo[][] }) => {
             setDailyList(prevDailyList => prevDailyList.filter((c) => c.id !== cat.id));
         }
     }
-    useEffect(() => {
-        setMasterList(t("master"));
-        setDailyList(t("daily"));
-        setIsInitialized(true);
-    }, []);
 
-    useEffect(() => {
-        if (isInitialized) {
-            localStorage.setItem(`${NAMESPACE}-master`, JSON.stringify(masterList));
-        }
-    }, [masterList]);
+    // useEffect(() => {
+    //     if (isInitialized) {
+    //         localStorage.setItem(`${NAMESPACE}-master`, JSON.stringify(masterList));
+    //     }
+    // }, [masterList]);
 
-    useEffect(() => {
-        if (isInitialized) {
-            localStorage.setItem(`${NAMESPACE}-daily`, JSON.stringify(dailyList));
-        }
-    }, [dailyList]);
+    // useEffect(() => {
+    //     if (isInitialized) {
+    //         localStorage.setItem(`${NAMESPACE}-daily`, JSON.stringify(dailyList));
+    //     }
+    // }, [dailyList]);
 
     return (
         <>
