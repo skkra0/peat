@@ -30,6 +30,7 @@ model ListInfo {
 
 model ProjectInfo {
   id          Int       @id @default(autoincrement())
+  key         Int?
   title       String    @db.VarChar(100)
   items       String[]
   finished    Boolean[]

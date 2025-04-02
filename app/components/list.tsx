@@ -6,19 +6,20 @@ import Project from "./project";
 import Editable from "./editable";
 
 interface ListProps {
+    id: number;
     title: string;
     listType: ListType;
     categories: ProjectInfo[];
-    updateCategoryGlobal: (cat: ProjectInfo) => void; 
+    updateCategoryFactory: (listType: ListType) => (cat: ProjectInfo) => void; 
     addCategory: (cat: ProjectInfo, listType: ListType) => void;
     deleteCategory: (cat: ProjectInfo, listType: ListType) => void;
-    transferCategory?: (cat: ProjectInfo) => void;
+    transferCategory?: (cat: ProjectInfo) => Promise<void>;
     className?: string;
 }
 
 const generateId = () => `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-const List = ({title, listType, categories, updateCategoryGlobal, addCategory, deleteCategory, transferCategory, className} : ListProps) => {
+const List = ({id, title, listType, categories, updateCategoryFactory, addCategory, deleteCategory, transferCategory, className} : ListProps) => {
 
     return (
         <div className={classNames(className, "w-fit pl-5 pr-5 flex flex-col items-center mx-auto")}>
@@ -28,7 +29,7 @@ const List = ({title, listType, categories, updateCategoryGlobal, addCategory, d
                 categories.map((cat, _) => <Project
                     cat={cat}
                     onDelete = {(cat: ProjectInfo) => deleteCategory(cat, listType)}
-                    onUpdate = {updateCategoryGlobal}
+                    onUpdate = {updateCategoryFactory(listType)}
                     key={cat.id}
                     sendCatToDaily={transferCategory}
                     master={listType === 'master'}
@@ -38,7 +39,13 @@ const List = ({title, listType, categories, updateCategoryGlobal, addCategory, d
               className="text-2xl font-semibold italic w-max mb-24"
               initial=""
               onBlur={(content: string) => {
-                // addCategory(new Category(content, [], [], generateId()), listType);
+                addCategory({
+                    id: -1, 
+                    key: null,
+                    title: content,
+                    items: [],
+                    finished: [],
+                    listId: id}, listType)
                 }}
               placeholder="New category..."
               clearOnBlur
