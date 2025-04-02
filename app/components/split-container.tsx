@@ -26,9 +26,9 @@ const SplitContainer = ({ lists }: { lists: {id: number, list: ProjectInfo[]}[] 
     const handleUpdate = (listType: ListType) => {
         if (listType === 'master') {
             return (cat: ProjectInfo) => {
-                setMasterList(prevMasterList => prevMasterList.map((c) => c.id === cat.id ? cat : c));
+                setMasterList(prevMasterList => prevMasterList.map((c) => c.id === cat.id ? {...cat} : c));
                 if (cat.key) {
-                    setDailyList(prevDailyList => prevDailyList.map((c) => c.id === cat.key ? cat : c));
+                    setDailyList(prevDailyList => prevDailyList.map((c) => c.id === cat.key ? {...c, title: cat.title, items: [...cat.items], finished: [...cat.finished]} : c));
                 }
                 try {
                     updateProjectInfo(cat);
@@ -38,9 +38,9 @@ const SplitContainer = ({ lists }: { lists: {id: number, list: ProjectInfo[]}[] 
             }
         } else {
             return (cat: ProjectInfo) => {
-                setDailyList(prevDailyList => prevDailyList.map((c) => c.id === cat.id ? cat : c));
+                setDailyList(prevDailyList => prevDailyList.map((c) => c.id === cat.id ? {...cat} : c));
                 if (cat.key) {
-                    setMasterList(prevMasterList => prevMasterList.map((c) => c.id === cat.key ? cat : c));
+                    setMasterList(prevMasterList => prevMasterList.map((c) => c.id === cat.key ? {...c, title: cat.title, items: [...cat.items], finished: [...cat.finished]} : c));
                 }
                 try {
                     updateProjectInfo(cat);
